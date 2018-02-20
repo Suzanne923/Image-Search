@@ -12,7 +12,22 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(process.cwd() + '/views'));
 
-function getSearchResult
+function get(url, callback) {
+  http.get(url, (res) => {
+    if (res.statusCode !== 200) {
+      callback(res.statusCode, 'Error: could not get resource');
+      return;
+    }
+    
+    let data = '';
+    res.on('data', (chunk) => {
+      data += chunk;
+    });
+    res.on('end', () => {
+      callback(res.statusCode, data);
+    });
+  });
+};
 
 // Routes
 app.get('/api/latest/imagesearch', (req, res, next) => {
@@ -34,9 +49,7 @@ app.get('/api/imagesearch/:search*', (req, res, next) => {
     }
   });
   
-  http.get('http://api.qwant.com/api/search/images?count=10&offset=1&q=cars', (response) => {
-    console.log(response);
-  });
+  
 });
 
 app.listen(process.env.PORT, () => {
