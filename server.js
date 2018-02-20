@@ -7,18 +7,22 @@ const app = express();
 const searchTerm = require('./models/searchTerm');
 mongoose.connect(process.env.MONGOLAB_URI);
 
-// https://www.youtube.com/watch?v=3TDtF4S4m4M
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(process.cwd() + '/views'));
 
 // Routes
+app.get('/api/latest/imagesearch', (req, res, next) => {
+  searchTerm.find({}, (err, data) => {
+    res.json(data);
+  });
+});
+
 app.get('/api/imagesearch/:search*', (req, res, next) => {
-  const query = req.params.search;
+  const searchValue = req.params.search;
   const offset = req.query.offset;
   const data = new searchTerm({
-    query: query,
+    searchValue: searchValue,
     searchDate: new Date()
   });
   data.save(err => {

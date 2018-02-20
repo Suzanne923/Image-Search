@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const searchTermSchema = new Schema({ 
-  query: String,
+  searchValue: String,
   searchDate: Date,
 }, { timestamps: true });
 
