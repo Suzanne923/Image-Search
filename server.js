@@ -7,6 +7,7 @@ const app = express();
 const searchTerm = require('./models/searchTerm');
 mongoose.connect(process.env.MONGOLAB_URI);
 
+// AIzaSyBil5Y0mMTsPipexN_mCVupYcrzXg04Fi8 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(process.cwd() + '/views'));
@@ -30,10 +31,8 @@ app.get('/api/imagesearch/:search*', (req, res, next) => {
       res.send('Error saving to database');
     }
   });
-  GoogleImageSearch.searchImage(searchValue)
-    .then((res) => {
-      res.json(res);
-  });
+  get('https://api.qwant.com/api/search/images?count=10&offset=1&q=cars', (res) => {
+    
 });
 
 app.listen(process.env.PORT, () => {
