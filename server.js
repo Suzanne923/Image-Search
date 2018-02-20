@@ -1,5 +1,5 @@
 const express = require('express');
-const http = require('http');
+const https = require('https');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(express.static(process.cwd() + '/views'));
 
 function get(url, callback) {
-  http.get(url, (res) => {
+  https.get(url, (res) => {
     if (res.statusCode !== 200) {
       callback(res.statusCode, 'Error: could not get resource');
       return;
@@ -23,6 +23,7 @@ function get(url, callback) {
     res.on('data', (chunk) => {
       data += chunk;
     });
+    
     res.on('end', () => {
       callback(res.statusCode, data);
     });
@@ -43,12 +44,17 @@ app.get('/api/imagesearch/:search*', (req, res, next) => {
     searchValue: searchValue,
     searchDate: new Date()
   });
+  
   data.save(err => {
     if (err) {
       res.send('Error saving to database');
     }
   });
   
+  get('https://api.qwant.com/api/search/images?count=10&offset=1&q=cars', (statusCode, data) => {
+    console.log(statusCode, data);
+    res.end();
+  });
   
 });
 
