@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const Bing = require('node-bing-api')({ accKey: '7d30ebf8b69a4dd29ab95f7359197132'});
+const GoogleImageSearch = require('free-google-image-search');
 const app = express();
 const searchTerm = require('./models/searchTerm');
 mongoose.connect(process.env.MONGOLAB_URI);
@@ -30,10 +30,9 @@ app.get('/api/imagesearch/:search*', (req, res, next) => {
       res.send('Error saving to database');
     }
   });
-  Bing.images(searchValue, {
-    top:10
-  }, (error, rez, body) => {
-    res.json(body);
+  GoogleImageSearch.searchImage(searchValue)
+    .then((res) => {
+      res.json(res);
   });
 });
 
