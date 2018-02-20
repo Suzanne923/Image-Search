@@ -36,13 +36,13 @@ function get(query, callback) {
 // Routes
 app.get('/api/latest/imagesearch', (req, res, next) => {
   console.log('fetching latest searches');
-  searchTerm.find({}, (err, data) => {
+  searchTerm.find({}, { _id: 0, __v: 0 }, (err, data) => {
     if (err) {
       console.log('err: ', err);
       res.json({ error: err });
     }
     res.json(data);
-  });
+  }).limit( 5 );
 });
 
 app.get('/api/imagesearch/:search*', (req, res, next) => {
