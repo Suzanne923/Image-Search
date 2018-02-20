@@ -56,7 +56,7 @@ app.get('/api/imagesearch/:search*', (req, res, next) => {
   });
   
   get(searchValue, (statusCode, data) => {
-    res.json(data);
+    res.json(JSON.parse(data));
   });
   
 });
