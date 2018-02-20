@@ -10,8 +10,14 @@ app.use(bodyParser.json());
 app.use(express.static(process.cwd() + '/views'));
 
 // Routes
-app.get('api/imagesearch/:search*', (req, res, next) => {
-  let search req.params;
+app.get('/api/imagesearch/:search*', (req, res, next) => {
+  const query = req.params.search;
+  const offset = req.query.offset;
+  
+  res.json({
+    search_value: query,
+    offset: offset
+  });
 });
 
 app.listen(process.env.PORT, () => {
