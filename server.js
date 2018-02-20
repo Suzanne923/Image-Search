@@ -10,19 +10,28 @@ const searchTerm = require('./models/searchTerm');
 app.use(cors());
 app.use(bodyParser.json());
 
-function get(url, callback) {
-  https.get(url, (res) => {
-  
-    
+function get(query, callback) {
+  const options = {
+    protocol: 'https:',
+    hostname: 'api.qwant.com',
+    path: '/api/search/images?count=10&offset=1&q=' + query,
+    method: 'GET',
+    headers: {
+      'User-Agent': 'NodeJS qwant-api module'
+    }
+  };
+  const req = https.request(options, (res) => {
+
     let data = '';
     res.on('data', (chunk) => {
       data += chunk;
     });
-    
+
     res.on('end', () => {
       callback(res.statusCode, data);
     });
   });
+  req.end();
 };
 
 // Routes
@@ -46,9 +55,8 @@ app.get('/api/imagesearch/:search*', (req, res, next) => {
     }
   });
   
-  get('https://api.qwant.com/api/search/images?count=10&offset=1&q=cats', (statusCode, data) => {
-    console.log(statusCode, data);
-    res.end();
+  get(searchValue, (statusCode, data) => {
+    res.json(data);
   });
   
 });
