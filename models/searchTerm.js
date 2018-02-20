@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const searchTerm = new Schema({ 
+const searchTermSchema = new Schema({ 
   query: String,
   searchDate: Date,
-});
+}, { timestamps: true });
+
+const ModelClass = mongoose.model('searchTerm', searchTermSchema);
+
+module.exports = ModelClass;
