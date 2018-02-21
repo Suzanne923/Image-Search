@@ -10,11 +10,11 @@ mongoose.connect(process.env.MONGOLAB_URI);
 app.use(cors());
 app.use(bodyParser.json());
 
-function get(query, callback) {
+function get(offset, query, callback) {
   const options = {
     protocol: 'https:',
     hostname: 'api.qwant.com',
-    path: '/api/search/images?count=10&offset=1&q=' + query,
+    path: '/api/search/images?count=10&offset=' + offset + '&q=' + query,
     method: 'GET',
     headers: {
       'User-Agent': 'NodeJS qwant-api module'
@@ -59,9 +59,9 @@ app.get('/api/imagesearch/:search*', (req, res, next) => {
     }
   });
   
-  get(searchValue, (statusCode, data) => {
-    console.log(data);
-    res.json(JSON.parse(data.data));
+  get(offset, searchValue, (statusCode, data) => {
+    const results = JSON.parse(data).data.result.items;
+    res.json(results);
   });
 });
 
