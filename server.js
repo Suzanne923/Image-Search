@@ -42,11 +42,11 @@ app.get('/api/latest/imagesearch', (req, res, next) => {
       res.json({ error: err });
     }
     res.json(data);
-  }).limit( 5 );
+  }).limit(10);
 });
 
 app.get('/api/imagesearch/:search*', (req, res, next) => {
-  const searchValue = req.params.search;
+  const searchValue = encodeURI(req.params.search);
   const offset = req.query.offset;
   const data = new searchTerm({
     searchValue: searchValue,
@@ -60,7 +60,8 @@ app.get('/api/imagesearch/:search*', (req, res, next) => {
   });
   
   get(searchValue, (statusCode, data) => {
-    res.json(JSON.parse(data));
+    console.log(data);
+    res.json(JSON.parse(data.data));
   });
 });
 
